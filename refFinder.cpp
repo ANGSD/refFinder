@@ -71,7 +71,7 @@ int loadChr(perFasta *f, char*chrName){
   
   f->seqs[f->asso.size()-1] = faidx_fetch_seq(f->fai, chrName, 0, 0x7fffffff, &f->chrLen[f->asso.size()-1]);
   if(f->seqs[f->asso.size()-1]==NULL){
-    fprintf(stderr,"[%s] Error loading fasta info from chr:\'%s\' \n",__FUNCTION__,chrName);  
+    fprintf(stderr,"[%s] Error loading fasta info from chr:\'%s\', will set all positions to \'N\' for this chromosome \n",__FUNCTION__,chrName);  
     f->chrLen[f->asso.size()-1] = 0;
   }
   //  fprintf(stderr,"[%s] done\n",__FUNCTION__);

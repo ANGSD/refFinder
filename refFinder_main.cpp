@@ -6,7 +6,7 @@
 #define LENS 100000
 
 int main(int argc, char **argv){
-  fprintf(stderr,"pipe into: ./refFinder hg19.fa [inputIsZero full]\n");
+  fprintf(stderr,"pipe into: ./refFinder hg19.fa [inputIsZero full toupper]\n");
   if(argc==1)
     return 0;
   char *refname = argv[1];
