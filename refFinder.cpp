@@ -89,6 +89,8 @@ char getchar(char *chr,int pos,perFasta *ref){
   }else
     which = it->second;
   char refchar = 'N';
+  if(pos<0) //<-strange case of nonsense position
+    return refchar;
   if(pos < ref->chrLen[which])
     refchar = ref->seqs[which][pos];
   else
