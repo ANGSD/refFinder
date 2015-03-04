@@ -1,19 +1,37 @@
+CFLAGS += $(FLAGS)
+CXXFLAGS += $(FLAGS)
+
+CSRC = $(wildcard *.c) 
+CXXSRC = $(wildcard *.cpp)
+OBJ = $(CSRC:.c=.o) $(CXXSRC:.cpp=.o)
+
+
 FLAGS=-O3
 
-all: refFinder
+all: htshook refFinder
 
-razf.o: razf.c razf.h
-	$(CC) -c razf.c $(FLAGS)
 
-faidx.o: faidx.c faidx.h khash.h
-	$(CC) -c faidx.c $(FLAGS)
+# Adjust $(HTSDIR) to point to your top-level htslib directory
+HTSDIR = ../htslib
+HTS = $(realpath $(HTSDIR))
+HTSLIB = $(HTS)/libhts.a
 
-refFinder.o: refFinder.cpp razf.o faidx.o
-	$(CXX) -c refFinder.cpp $(FLAGS) -o tmp.o
-	ld -r tmp.o faidx.o razf.o -o refFinder.o 
 
-refFinder: refFinder.o refFinder_main.cpp 
-	$(CXX) refFinder_main.cpp $(FLAGS) refFinder.o -o refFinder -lz
+.PHONY: misc clean htshook test
+
+
+htshook: 
+	make -C $(HTS)
+
+-include $(OBJ:.o=.d)
+
+%.o: %.cpp
+	$(CXX) -c  $(CXXFLAGS)  -I$(HTS) $*.cpp
+	$(CXX) -MM $(CXXFLAGS)  -I$(HTS) $*.cpp >$*.d
+
+
+refFinder: $(OBJ)
+	$(CXX) $(FLAGS)  -o refFinder *.o -lz $(HTSLIB) -lpthread
 
 
 

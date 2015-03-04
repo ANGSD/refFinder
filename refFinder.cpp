@@ -9,7 +9,7 @@
 #include <cstring>
 #include <map>
 
-#include "faidx.h"
+#include "htslib/faidx.h"
 #include "refFinder.h"
 
 struct cmp_str
@@ -40,7 +40,7 @@ perFasta *init(const char *fname){
     fprintf(stderr,"[%s:%s] error reading fai file:%s\n",__FILE__,__FUNCTION__,fname);
     exit(0);
   }
-  int nref = getnref(r->fai);
+  int nref = faidx_nseq(r->fai);
   r->chrLen = new int[nref];
   r->seqs = new char*[nref];
   for(int i=0;i<nref;i++)
