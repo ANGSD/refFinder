@@ -9,7 +9,7 @@
 #include <cstring>
 #include <map>
 
-#include "htslib/faidx.h"
+#include "faidx.h"
 #include "refFinder.h"
 
 struct cmp_str
