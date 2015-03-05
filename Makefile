@@ -8,10 +8,12 @@ CXXSRC = $(wildcard *.cpp)
 OBJ = $(CSRC:.c=.o) $(CXXSRC:.cpp=.o)
 
 
--include $(OBJ:.o=.d)
+
 
 
 all: refFinder
+
+-include $(OBJ:.o=.d)
 
 %.o: %.cpp
 	$(CXX) -c  $(CXXFLAGS)  $*.cpp
@@ -19,8 +21,8 @@ all: refFinder
 
 
 %.o: %.c
-	$(CC) -c  $(CFLAGS) -I$(HTS) $*.c
-	$(CC) -MM $(CFLAGS)  -I$(HTS) $*.c >$*.d
+	$(CC) -c  $(CFLAGS) $*.c
+	$(CC) -MM $(CFLAGS) $*.c >$*.d
 
 
 refFinder: $(OBJ)
