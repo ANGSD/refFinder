@@ -6,9 +6,11 @@
 #define LENS 100000
 
 int main(int argc, char **argv){
-  fprintf(stderr,"pipe into: ./refFinder hg19.fa [inputIsZero full toupper]\n");
-  if(argc==1)
+  
+  if(argc==1){
+    fprintf(stderr,"\t-> Pipe into: ./refFinder hg19.fa [inputIsZero full toupper]\n");
     return 0;
+  }
   char *refname = argv[1];
   argv+=2;
 
@@ -22,13 +24,13 @@ int main(int argc, char **argv){
     else if(!strcasecmp("full",*argv)) full =1;
     else if(!strcasecmp("toupper",*argv)) toUpper =1;
     else{
-      fprintf(stderr,"problem understanding: \'%s\' options are inputIsZero full\n",*argv);
+      fprintf(stderr,"\t-> Problem understanding: \'%s\' options are inputIsZero full\n",*argv);
       return 0;
     }
     argv++;
     argc--;
   }
-  fprintf(stderr,"Assuming your fasta is: '%s' and we will subtract each position in input with:%d and full:%d\n",refname,adjust,full);
+  fprintf(stderr,"\t-> Assuming your fasta is: '%s' and we will subtract each position in input with:%d and full:%d\n",refname,adjust,full);
   
   perFasta *ref = init(refname);
   char *buf = new char[LENS];

@@ -31,7 +31,7 @@ struct __perFasta_t{
 
 //this will initialize our data
 perFasta *init(const char *fname){
-  fprintf(stderr,"[%s.%s:%d] %s\n",__FILE__,__FUNCTION__,__LINE__,fname);
+  fprintf(stderr,"\t-> [%s.%s:%d] %s\n",__FILE__,__FUNCTION__,__LINE__,fname);
   perFasta *r= new perFasta;
   r->fai = NULL;
   r->seqs = NULL;
@@ -54,6 +54,8 @@ void destroy(perFasta *f){
   fai_destroy(f->fai);
   int i=0;
   for(aMap::iterator it=f->asso.begin();it!=f->asso.end();++it){
+    if(it->second==-1)
+      continue;
     free(f->seqs[i++]);
     free(it->first);
   }
@@ -64,18 +66,20 @@ void destroy(perFasta *f){
 }
 
 int loadChr(perFasta *f, char*chrName){
-  //  fprintf(stderr,"[%s] \t->loading chr:%s from faidx=%p cursize=%zu\n",__FUNCTION__,chrName,f,f->asso.size());
+#if 0
+  fprintf(stderr,"\t-> [%s] ->loading chr:%s from faidx=%p cursize=%zu\n",__FUNCTION__,chrName,f,f->asso.size());
   fflush(stderr);
-  f->asso.insert(std::pair<char*,int>(strdup(chrName),f->asso.size()));
-  
-  
-  f->seqs[f->asso.size()-1] = faidx_fetch_seq(f->fai, chrName, 0, 0x7fffffff, &f->chrLen[f->asso.size()-1]);
-  if(f->seqs[f->asso.size()-1]==NULL){
-    fprintf(stderr,"[%s] Error loading fasta info from chr:\'%s\', will set all positions to \'N\' for this chromosome \n",__FUNCTION__,chrName);  
-    f->chrLen[f->asso.size()-1] = 0;
+#endif
+  if(faidx_has_seq(f->fai,chrName)==0){
+    fprintf(stderr,"\t-> [%s] Error loading fasta info from chr:\'%s\', will set all positions to \'N\' for this chromosome \n",__FUNCTION__,chrName);  
+    f->asso.insert(std::pair<char*,int>(strdup(chrName),-1));
+    return -1;
+  }else{
+    f->asso.insert(std::pair<char*,int>(strdup(chrName),f->asso.size()));
+    f->seqs[f->asso.size()-1] = faidx_fetch_seq(f->fai, chrName, 0, 0x7fffffff, &f->chrLen[f->asso.size()-1]);
+    return f->asso.size()-1;
   }
-  //  fprintf(stderr,"[%s] done\n",__FUNCTION__);
-  return f->asso.size()-1;
+
 }
 
 //this assumes that the pos is zero indexed
@@ -90,6 +94,8 @@ char getchar(char *chr,int pos,perFasta *ref){
     which = it->second;
   char refchar = 'N';
   if(pos<0) //<-strange case of nonsense position
+    return refchar;
+  if(which==-1)
     return refchar;
   if(pos < ref->chrLen[which])
     refchar = ref->seqs[which][pos];
