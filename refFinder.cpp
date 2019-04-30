@@ -29,13 +29,14 @@ struct __perFasta_t{
 };
 
 
+const char *globfilename = NULL;
 //this will initialize our data
 perFasta *init(const char *fname){
   fprintf(stderr,"\t-> [%s.%s:%d] %s\n",__FILE__,__FUNCTION__,__LINE__,fname);
   perFasta *r= new perFasta;
   r->fai = NULL;
   r->seqs = NULL;
-  
+  globfilename = fname;
   if(NULL==(r->fai = fai_load(fname))){
     fprintf(stderr,"[%s:%s] error reading fai file:%s\n",__FILE__,__FUNCTION__,fname);
     exit(0);
@@ -71,7 +72,7 @@ int loadChr(perFasta *f, char*chrName){
   fflush(stderr);
 #endif
   if(faidx_has_seq(f->fai,chrName)==0){
-    fprintf(stderr,"\t-> [%s] Error loading fasta info from chr:\'%s\', will set all positions to \'N\' for this chromosome \n",__FUNCTION__,chrName);  
+    fprintf(stderr,"\t-> [%s] Error loading fasta info from chr:\'%s\', will set all positions to \'N\' for this chromosome, fai:%s \n",__FUNCTION__,chrName,globfilename);  
     f->asso.insert(std::pair<char*,int>(strdup(chrName),-1));
     return -1;
   }else{
