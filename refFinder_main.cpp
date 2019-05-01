@@ -139,7 +139,7 @@ int main(int argc, char **argv){
       refchar = toupper(refchar);
       if(refchar!=al1 &refchar!=al2)
 	refchar='N';
-      if(refchar='N')
+      if(refchar=='N')
 	refchar='0';
       if(full){
 	buf[strlen(buf)-1]='\0';
