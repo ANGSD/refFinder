@@ -5,6 +5,8 @@
 #include <ctype.h>
 #define LENS 100000
 
+int onlyPrint = 5;
+
 char * get_region(char *extra,int &start,int &stop) {
   if(!extra){
     fprintf(stderr,"Must supply parameter for -r option\n");
@@ -119,9 +121,10 @@ int main(int argc, char **argv){
       else
 	ntok = sscanf(buf,"%s\t%d",chr,&pos);
       
-      if(ntok==2)
-	fprintf(stderr,"\t-> chr:%s\tpos:%d isSpace(theseperator):%d\n",chr,pos,isSpace);
-      else{
+      if(ntok==2){
+	if(onlyPrint-->0) //decrement compare not pointer
+	  fprintf(stderr,"\t-> chr:%s\tpos:%d isSpace(theseperator):%d (this will only be printed: %d times more)\n",chr,pos,isSpace,onlyPrint);
+      }else{
 	chr = get_region(buf,start,stop);
 	fprintf(stderr,"\t-> chr:%s\tstart:%d stpo:%d\n",chr,start,stop);
 	start++;

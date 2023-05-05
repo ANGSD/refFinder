@@ -15,7 +15,7 @@
 struct cmp_str
 {
    bool operator()(char const *a, char const *b)
-   {
+   const {
       return std::strcmp(a, b) < 0;
    }
 };
@@ -87,7 +87,7 @@ int loadChr(perFasta *f, char*chrName){
 char getchar(char *chr,int pos,perFasta *ref){
   
   static int verbCounter =20;
-  aMap::const_iterator it = ref->asso.find(chr);
+  aMap::iterator it = ref->asso.find(chr);
   int which = -1;
   if(it==ref->asso.end()){
     which = loadChr(ref,chr);

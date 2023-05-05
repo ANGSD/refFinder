@@ -23,7 +23,7 @@ refFinder: $(OBJ)
 	$(CXX) $(FLAGS)  -o refFinder *.o -lz -lpthread
 
 reffinder.so: $(OBJ)
-	$(CXX) -shared $(FLAGS)  -o libreffinder.so bgzf.o faidx.o hfile.o hfile_net.o knetfile.o refFinder.o
+	$(CXX) -shared $(FLAGS)  -o libreffinder.so bgzf.o faidx.o hfile.o hfile_net.o knetfile.o refFinder.o -lz
 
 reffinder.a: $(OBJ)
 	ar -rcs libreffinder.a bgzf.o faidx.o hfile.o hfile_net.o knetfile.o refFinder.o
