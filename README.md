@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/ANGSD/refFinder.svg?branch=master)](https://travis-ci.org/ANGSD/refFinder)
-refFinder
-
 ## [![Build Status](https://github.com/ANGSD/refFinder/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/ANGSD/refFinder/actions/workflows/c-cpp.yml) 
 =========
 
