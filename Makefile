@@ -7,6 +7,8 @@ CSRC = $(wildcard *.c)
 CXXSRC = $(wildcard *.cpp)
 OBJ = $(CSRC:.c=.o) $(CXXSRC:.cpp=.o)
 
+.PHONY: all clean test
+
 all: refFinder reffinder.so reffinder.a
 
 -include $(OBJ:.o=.d)
@@ -30,3 +32,11 @@ reffinder.a: $(OBJ)
 
 clean:
 	rm -f refFinder *.o *.so *.a
+
+test: test/MT.fa.gz test/MT.fa.gz.fai test/input.tsv
+	echo "test1) will print out a single site"
+	echo "MT 200" | ./refFinder test/MT.fa.gz
+	echo "test2) will print out a region" 
+	echo "MT:200-210" | ./refFinder test/MT.fa.gz
+	echo "test3) will print out a region" 	
+	cat test/input.tsv | ./refFinder test/MT.fa.gz
